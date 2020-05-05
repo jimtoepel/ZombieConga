@@ -10,7 +10,7 @@ import SpriteKit
 
 class GameScene: SKScene {
     
-    // - Properties
+    // MARK: - Properties
     let zombie = SKSpriteNode(imageNamed: "zombie1")
     let background = SKSpriteNode(imageNamed: "background1")
     var lastUpdateTime: TimeInterval = 0
@@ -19,6 +19,7 @@ class GameScene: SKScene {
     var velocity = CGPoint.zero
     let playableRect: CGRect
 
+    // MARK: - Engine Methods
     override init(size: CGSize) {
         let maxAspectRatio: CGFloat = 16.0 / 9.0
         let playableHeight = size.width / maxAspectRatio
@@ -67,28 +68,24 @@ class GameScene: SKScene {
         print("\(dt*1000) milliseconds since last update")
         move(sprite: zombie, velocity: velocity)
         boundsCheckZombie()
+        rotate(sprite: zombie, direction: velocity)
     }
     
+    // MARK: - Utility Methods
     func move(sprite:SKSpriteNode, velocity: CGPoint) {
         // 1
-        let amountToMove = CGPoint(x: velocity.x * CGFloat(dt),
-                                   y: velocity.y * CGFloat(dt))
+        let amountToMove = velocity * CGFloat(dt)
         print("Amount to move: \(amountToMove)")
         // 2
-        sprite.position = CGPoint(x: sprite.position.x + amountToMove.x,
-                                  y: sprite.position.y + amountToMove.y)
+        sprite.position += amountToMove
     }
     
     func moveZombieToward(location: CGPoint) {
-        let offset = CGPoint(x: location.x - zombie.position.x,
-                             y: location.y - zombie.position.y)
-        let length = sqrt(Double(offset.x * offset.x + offset.y * offset.y))
+        let offset = location - zombie.position
         
         // normalize the direction into a unit vector, then multiply by speed
-        let direction = CGPoint(x: offset.x / CGFloat(length),
-                                y: offset.y / CGFloat(length))
-        velocity = CGPoint(x: direction.x * zombieMovePointsPerSec,
-                           y: direction.y * zombieMovePointsPerSec)
+        let direction = offset.normalized()
+        velocity = direction * zombieMovePointsPerSec
     }
     
     func sceneTouched(touchLocation:CGPoint) {
@@ -138,6 +135,10 @@ class GameScene: SKScene {
         shape.strokeColor = SKColor.red
         shape.lineWidth = 4.0
         addChild(shape)
+    }
+    
+    func rotate(sprite: SKSpriteNode, direction: CGPoint) {
+        sprite.zRotation = direction.angle
     }
 }
 

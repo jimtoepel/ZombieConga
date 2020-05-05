@@ -13,6 +13,7 @@
 		B139DB27245E7B4800D26A81 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B139DB25245E7B4800D26A81 /* Main.storyboard */; };
 		B139DB29245E7B4A00D26A81 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B139DB28245E7B4A00D26A81 /* Assets.xcassets */; };
 		B139DB2C245E7B4A00D26A81 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B139DB2A245E7B4A00D26A81 /* LaunchScreen.storyboard */; };
+		B139DB3424611A8200D26A81 /* MyUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B139DB3324611A8200D26A81 /* MyUtils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		B139DB28245E7B4A00D26A81 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B139DB2B245E7B4A00D26A81 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B139DB2D245E7B4A00D26A81 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B139DB3324611A8200D26A81 /* MyUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyUtils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 			children = (
 				B139DB1B245E7B4800D26A81 /* AppDelegate.swift */,
 				B139DB21245E7B4800D26A81 /* GameScene.swift */,
+				B139DB3324611A8200D26A81 /* MyUtils.swift */,
 				B139DB23245E7B4800D26A81 /* GameViewController.swift */,
 				B139DB25245E7B4800D26A81 /* Main.storyboard */,
 				B139DB28245E7B4A00D26A81 /* Assets.xcassets */,
@@ -141,6 +144,7 @@
 				B139DB22245E7B4800D26A81 /* GameScene.swift in Sources */,
 				B139DB24245E7B4800D26A81 /* GameViewController.swift in Sources */,
 				B139DB1C245E7B4800D26A81 /* AppDelegate.swift in Sources */,
+				B139DB3424611A8200D26A81 /* MyUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
