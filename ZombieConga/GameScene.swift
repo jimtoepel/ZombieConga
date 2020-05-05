@@ -17,8 +17,24 @@ class GameScene: SKScene {
     var dt: TimeInterval = 0
     let zombieMovePointsPerSec: CGFloat = 480.0
     var velocity = CGPoint.zero
+    let playableRect: CGRect
 
+    override init(size: CGSize) {
+        let maxAspectRatio: CGFloat = 16.0 / 9.0
+        let playableHeight = size.width / maxAspectRatio
+        let playableMargin = (size.height - playableHeight)/2.0
+        playableRect = CGRect(x: 0,
+                              y: playableMargin,
+                              width: size.width,
+                              height: playableHeight)
+        super.init(size: size)
+    }
     
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    //DidMove is essentially "on startup"
     override func didMove(to view: SKView) {
         backgroundColor = SKColor.black
         let centerScreen = CGPoint(x: size.width/2, y: size.height/2)
@@ -36,6 +52,9 @@ class GameScene: SKScene {
         //Create a reference to the size of the BG node
         let mySize = background.size
         print("Size: \(mySize)")
+        
+        //Draw the aspect ratio
+        debugDrawPlayableArea()
     }
     
     override func update(_ currentTime: TimeInterval) {
@@ -93,8 +112,8 @@ class GameScene: SKScene {
     }
     
     func boundsCheckZombie() {
-        let bottomLeft = CGPoint.zero
-        let topRight = CGPoint(x: size.width, y: size.height)
+        let bottomLeft = CGPoint(x: 0, y: playableRect.minY)
+        let topRight = CGPoint(x: size.width, y: playableRect.maxY)
         
         if zombie.position.x <= bottomLeft.x {
             zombie.position.x = bottomLeft.x
@@ -112,6 +131,13 @@ class GameScene: SKScene {
             zombie.position.y = topRight.y
             velocity.y = -velocity.y
         }
+    }
+    
+    func debugDrawPlayableArea() {
+        let shape = SKShapeNode(rect: playableRect)
+        shape.strokeColor = SKColor.red
+        shape.lineWidth = 4.0
+        addChild(shape)
     }
 }
 
