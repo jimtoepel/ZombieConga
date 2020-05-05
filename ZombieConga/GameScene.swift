@@ -13,11 +13,12 @@ class GameScene: SKScene {
     // MARK: - Properties
     let zombie = SKSpriteNode(imageNamed: "zombie1")
     let background = SKSpriteNode(imageNamed: "background1")
-    var lastUpdateTime: TimeInterval = 0
-    var dt: TimeInterval = 0
+    var lastUpdateTime: TimeInterval = 0.0
+    var dt: TimeInterval = 0.0
     let zombieMovePointsPerSec: CGFloat = 480.0
     var velocity = CGPoint.zero
     let playableRect: CGRect
+    var lastTouchedLocation = CGPoint.zero
 
     // MARK: - Engine Methods
     override init(size: CGSize) {
@@ -62,11 +63,17 @@ class GameScene: SKScene {
         if lastUpdateTime > 0 {
             dt = currentTime - lastUpdateTime
         } else {
-            dt = 0
+            dt = 0.0
         }
         lastUpdateTime = currentTime
         print("\(dt*1000) milliseconds since last update")
-        move(sprite: zombie, velocity: velocity)
+        let checkMoveOffset = zombie.position - lastTouchedLocation
+        if (checkMoveOffset.length() <= zombieMovePointsPerSec * CGFloat(dt)) {
+            zombie.position = lastTouchedLocation
+            velocity = CGPoint.zero
+        } else {
+            move(sprite: zombie, velocity: velocity)
+        }
         boundsCheckZombie()
         rotate(sprite: zombie, direction: velocity)
     }
@@ -90,6 +97,7 @@ class GameScene: SKScene {
     
     func sceneTouched(touchLocation:CGPoint) {
         moveZombieToward(location: touchLocation)
+        lastTouchedLocation = touchLocation
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
