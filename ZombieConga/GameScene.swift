@@ -10,9 +10,12 @@ import SpriteKit
 
 class GameScene: SKScene {
     
-    // MARK: - Properties
+    // MARK: - Assets
     let zombie = SKSpriteNode(imageNamed: "zombie1")
     let background = SKSpriteNode(imageNamed: "background1")
+    let enemy = SKSpriteNode(imageNamed: "enemy")
+    
+    // MARK: - Properties
     var lastUpdateTime: TimeInterval = 0.0
     var dt: TimeInterval = 0.0
     let zombieMovePointsPerSec: CGFloat = 480.0
@@ -47,14 +50,13 @@ class GameScene: SKScene {
         background.zPosition = -1
         addChild(background)
         
-        //Add a zombie
-
-        zombie.position = CGPoint(x: 400, y:400)
-        addChild(zombie)
+        //Add a zombie + enemy
+        spawnZombie()
+        spawnEnemy()
         
         //Create a reference to the size of the BG node
         let mySize = background.size
-        print("Size: \(mySize)")
+//        print("Size: \(mySize)")
         
         //Draw the aspect ratio
         debugDrawPlayableArea()
@@ -67,7 +69,7 @@ class GameScene: SKScene {
             dt = 0.0
         }
         lastUpdateTime = currentTime
-        print("\(dt*1000) milliseconds since last update")
+//        print("\(dt*1000) milliseconds since last update")
         let checkMoveOffset = zombie.position - lastTouchedLocation
         if (checkMoveOffset.length() <= zombieMovePointsPerSec * CGFloat(dt)) {
             zombie.position = lastTouchedLocation
@@ -83,7 +85,7 @@ class GameScene: SKScene {
     func move(sprite:SKSpriteNode, velocity: CGPoint) {
         // 1
         let amountToMove = velocity * CGFloat(dt)
-        print("Amount to move: \(amountToMove)")
+//        print("Amount to move: \(amountToMove)")
         // 2
         sprite.position += amountToMove
     }
@@ -150,6 +152,34 @@ class GameScene: SKScene {
         let shortest = shortestAngleBetween(angle1: sprite.zRotation, angle2: velocity.angle)
         let amountToRotate = min(rotateRadiansPerSec * CGFloat(dt), abs(shortest))
         sprite.zRotation += (amountToRotate * shortest.sign())
+    }
+    
+    func spawnEnemy() {
+        enemy.position = CGPoint(x: size.width + enemy.size.width/2, y: size.height/2)
+        addChild(enemy)
+        
+        let actionMidMove = SKAction.moveBy(x: -size.width/2 - enemy.size.width/2,
+                                            y: -playableRect.height/2 + enemy.size.height/2,
+                                            duration: 2.0)
+        
+        let actionMove = SKAction.moveBy(x: -size.width/2 - enemy.size.width/2,
+                                         y: playableRect.height/2 - enemy.size.height/2,
+                                         duration: 2.0)
+        
+        let wait = SKAction.wait(forDuration: 0.25)
+        let logMessage = SKAction.run() {
+            print("Reached Bottom!")
+        }
+        
+        
+        let halfSequence = SKAction.sequence([actionMidMove, logMessage, wait, actionMove])
+        let sequence = SKAction.sequence([halfSequence, halfSequence.reversed()])
+        enemy.run(sequence)
+    }
+    
+    func spawnZombie() {
+        zombie.position = CGPoint(x: 400, y:400)
+        addChild(zombie)
     }
 }
 
