@@ -14,6 +14,11 @@
 		B139DB29245E7B4A00D26A81 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B139DB28245E7B4A00D26A81 /* Assets.xcassets */; };
 		B139DB2C245E7B4A00D26A81 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B139DB2A245E7B4A00D26A81 /* LaunchScreen.storyboard */; };
 		B139DB3424611A8200D26A81 /* MyUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B139DB3324611A8200D26A81 /* MyUtils.swift */; };
+		B139DB3B2465DA2F00D26A81 /* win.wav in Resources */ = {isa = PBXBuildFile; fileRef = B139DB362465DA2F00D26A81 /* win.wav */; };
+		B139DB3C2465DA2F00D26A81 /* lose.wav in Resources */ = {isa = PBXBuildFile; fileRef = B139DB372465DA2F00D26A81 /* lose.wav */; };
+		B139DB3D2465DA2F00D26A81 /* hitCat.wav in Resources */ = {isa = PBXBuildFile; fileRef = B139DB382465DA2F00D26A81 /* hitCat.wav */; };
+		B139DB3E2465DA2F00D26A81 /* hitCatLady.wav in Resources */ = {isa = PBXBuildFile; fileRef = B139DB392465DA2F00D26A81 /* hitCatLady.wav */; };
+		B139DB3F2465DA2F00D26A81 /* backgroundMusic.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B139DB3A2465DA2F00D26A81 /* backgroundMusic.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +31,11 @@
 		B139DB2B245E7B4A00D26A81 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B139DB2D245E7B4A00D26A81 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B139DB3324611A8200D26A81 /* MyUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyUtils.swift; sourceTree = "<group>"; };
+		B139DB362465DA2F00D26A81 /* win.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = win.wav; sourceTree = "<group>"; };
+		B139DB372465DA2F00D26A81 /* lose.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = lose.wav; sourceTree = "<group>"; };
+		B139DB382465DA2F00D26A81 /* hitCat.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hitCat.wav; sourceTree = "<group>"; };
+		B139DB392465DA2F00D26A81 /* hitCatLady.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hitCatLady.wav; sourceTree = "<group>"; };
+		B139DB3A2465DA2F00D26A81 /* backgroundMusic.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = backgroundMusic.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,8 +76,21 @@
 				B139DB28245E7B4A00D26A81 /* Assets.xcassets */,
 				B139DB2A245E7B4A00D26A81 /* LaunchScreen.storyboard */,
 				B139DB2D245E7B4A00D26A81 /* Info.plist */,
+				B139DB352465DA2F00D26A81 /* Sounds */,
 			);
 			path = ZombieConga;
+			sourceTree = "<group>";
+		};
+		B139DB352465DA2F00D26A81 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				B139DB362465DA2F00D26A81 /* win.wav */,
+				B139DB372465DA2F00D26A81 /* lose.wav */,
+				B139DB382465DA2F00D26A81 /* hitCat.wav */,
+				B139DB392465DA2F00D26A81 /* hitCatLady.wav */,
+				B139DB3A2465DA2F00D26A81 /* backgroundMusic.mp3 */,
+			);
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -128,8 +151,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B139DB3C2465DA2F00D26A81 /* lose.wav in Resources */,
 				B139DB27245E7B4800D26A81 /* Main.storyboard in Resources */,
+				B139DB3F2465DA2F00D26A81 /* backgroundMusic.mp3 in Resources */,
+				B139DB3B2465DA2F00D26A81 /* win.wav in Resources */,
+				B139DB3D2465DA2F00D26A81 /* hitCat.wav in Resources */,
 				B139DB29245E7B4A00D26A81 /* Assets.xcassets in Resources */,
+				B139DB3E2465DA2F00D26A81 /* hitCatLady.wav in Resources */,
 				B139DB2C245E7B4A00D26A81 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
