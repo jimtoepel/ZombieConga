@@ -96,6 +96,7 @@ class GameScene: SKScene {
             rotate(sprite: zombie, direction: velocity, rotateRadiansPerSec: zombieRotateRadiansPerSec)
         }
         boundsCheckZombie()
+        checkCollisions()
     }
     
     // MARK: - Utility Methods
@@ -174,6 +175,7 @@ class GameScene: SKScene {
     
     func spawnEnemy() {
         let enemy = SKSpriteNode(imageNamed: "enemy")
+        enemy.name = "enemy"
         enemy.position = CGPoint(x: size.width + enemy.size.width/2,
                                  y: CGFloat.random(
                                     min: playableRect.minY + enemy.size.height/2,
@@ -194,6 +196,7 @@ class GameScene: SKScene {
     
     func spawnCat() {
         let cat = SKSpriteNode(imageNamed: "cat")
+        cat.name = "cat"
         cat.position = CGPoint(x: CGFloat.random(min: playableRect.minX,
                                                  max: playableRect.maxX),
                                y: CGFloat.random(min: playableRect.minY,
@@ -228,5 +231,36 @@ class GameScene: SKScene {
     func stopZombieAnimation() {
         zombie.removeAction(forKey: "animation")
     }
+    
+    func zombieHit(cat: SKSpriteNode) {
+        cat.removeFromParent()
+    }
+    
+    func zombieHit(enemy: SKSpriteNode) {
+        enemy.removeFromParent()
+    }
+    
+    func checkCollisions() {
+        var hitCats: [SKSpriteNode] = []
+        enumerateChildNodes(withName: "cat") {node, _ in
+            let cat = node as! SKSpriteNode
+            if cat.frame.intersects(self.zombie.frame) {
+                hitCats.append(cat)
+            }
+        }
+        for cat in hitCats {
+            zombieHit(cat: cat)
+        }
+    
+        var hitEnemies: [SKSpriteNode] = []
+        enumerateChildNodes(withName: "enemy") { node, _ in
+            let enemy = node as! SKSpriteNode
+            if node.frame.insetBy(dx: 20, dy: 20).intersects(self.zombie.frame) {
+                hitEnemies.append(enemy)
+            }
+        }
+        for enemy in hitEnemies {
+            zombieHit(enemy:enemy)
+        }
+    }
 }
-
