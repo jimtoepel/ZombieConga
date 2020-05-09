@@ -18,6 +18,7 @@ class GameScene: SKScene {
     var lastUpdateTime: TimeInterval = 0.0
     var dt: TimeInterval = 0.0
     let zombieMovePointsPerSec: CGFloat = 480.0
+    let catMovePointsPerSec: CGFloat = 480.0
     let zombieRotateRadiansPerSec: CGFloat = 4.0 * π
     var velocity = CGPoint.zero
     let playableRect: CGRect
@@ -101,6 +102,7 @@ class GameScene: SKScene {
             rotate(sprite: zombie, direction: velocity, rotateRadiansPerSec: zombieRotateRadiansPerSec)
         }
         boundsCheckZombie()
+        moveTrain()
     }
 
     
@@ -200,6 +202,7 @@ class GameScene: SKScene {
     
     func spawnZombie() {
         zombie.position = CGPoint(x: 400, y:400)
+        zombie.zPosition = 100
         addChild(zombie)
     }
     
@@ -295,6 +298,23 @@ class GameScene: SKScene {
         }
         for enemy in hitEnemies {
             zombieHit(enemy:enemy)
+        }
+    }
+    
+    func moveTrain() {
+        var targetPosition = zombie.position
+        
+        enumerateChildNodes(withName: "train") { node, stop in
+            if !node.hasActions() {
+                let actionDuration = 0.3
+                let offset = targetPosition - node.position
+                let direction = offset.normalized()
+                let amountToMovePerSec = direction * self.catMovePointsPerSec
+                let amountToMove = amountToMovePerSec * CGFloat(actionDuration)
+                let moveAction = SKAction.moveBy(x: amountToMove.x, y: amountToMove.y, duration: actionDuration)
+                node.run(moveAction)
+            }
+            targetPosition = node.position
         }
     }
 
