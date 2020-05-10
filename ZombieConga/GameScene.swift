@@ -25,6 +25,9 @@ class GameScene: SKScene {
     var lastTouchedLocation = CGPoint.zero
     let zombieAnimation: SKAction
     var zombieInvinvible = false
+    var lives = 5
+    var gameOver = false
+    
     
     //MARK: - Preload Actions
     let catCollisionSound: SKAction = SKAction.playSoundFileNamed("hitCat.wav", waitForCompletion: false)
@@ -271,6 +274,8 @@ class GameScene: SKScene {
         }
         zombie.run(SKAction.sequence([blinkAction, resetHiddenState]))
         run(enemyCollisionSound)
+        loseCats()
+        lives -= 1
     }
     
     func checkCollisions() {
@@ -315,6 +320,31 @@ class GameScene: SKScene {
                 node.run(moveAction)
             }
             targetPosition = node.position
+        }
+    }
+    
+    func loseCats() {
+        var loseCount = 0
+        enumerateChildNodes(withName: "train") { node, stop in
+            var randomSpot = node.position
+            
+            randomSpot.x += CGFloat.random(min: -100, max: 100)
+            randomSpot.y += CGFloat.random(min: -100, max: 100)
+            
+            node.name = ""
+            node.run(
+                SKAction.sequence([
+                    SKAction.group([
+                        SKAction.rotate(byAngle: π*4, duration: 1.0),
+                        SKAction.move(to: randomSpot, duration: 1.0),
+                        SKAction.scale(to: 0, duration: 1.0)
+                        ]),
+                    SKAction.removeFromParent()
+            ]))
+        loseCount += 1
+            if loseCount >= 2 {
+                stop[0] = true
+            }
         }
     }
 
