@@ -106,6 +106,10 @@ class GameScene: SKScene {
         }
         boundsCheckZombie()
         moveTrain()
+        if lives <= 0 && !gameOver {
+            gameOver = true
+            print("You lose!")
+        }
     }
 
     
@@ -308,8 +312,10 @@ class GameScene: SKScene {
     
     func moveTrain() {
         var targetPosition = zombie.position
+        var trainCount = 0
         
         enumerateChildNodes(withName: "train") { node, stop in
+            trainCount += 1
             if !node.hasActions() {
                 let actionDuration = 0.3
                 let offset = targetPosition - node.position
@@ -320,6 +326,10 @@ class GameScene: SKScene {
                 node.run(moveAction)
             }
             targetPosition = node.position
+        }
+        if trainCount >= 15 && !gameOver {
+            gameOver = true
+            print("You win!")
         }
     }
     
