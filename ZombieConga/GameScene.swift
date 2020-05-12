@@ -27,6 +27,8 @@ class GameScene: SKScene {
     var zombieInvinvible = false
     var lives = 5
     var gameOver = false
+    let cameraNode = SKCameraNode()
+    let cameraMovePointsPerSec: CGFloat = 200.0
     
     
     //MARK: - Preload Actions
@@ -59,32 +61,31 @@ class GameScene: SKScene {
     //DidMove is essentially "on startup"
     override func didMove(to view: SKView) {
         backgroundColor = SKColor.black
-        let centerScreen = CGPoint(x: size.width/2, y: size.height/2)
         
-        //Add a background
-        background.position = centerScreen
-        background.zPosition = -1
-        addChild(background)
-        
-        //Add a zombie + enemy
+        for i in 0...1 {
+            let background = backgroundNode()
+            background.anchorPoint = CGPoint.zero
+            background.position = CGPoint(x: CGFloat(i)*background.size.width, y: 0)
+            background.name = "background"
+            background.zPosition = -1
+            addChild(background)
+        }
+
         spawnZombie()
-//        zombie.run(SKAction.repeatForever(zombieAnimation))
+
         run(SKAction.repeatForever(SKAction.sequence([SKAction.run() {
             [weak self] in self?.spawnEnemy()
             },
             SKAction.wait(forDuration: 2.0)])))
         
-        // Add Cats!
         run(SKAction.repeatForever(SKAction.sequence([SKAction.run() {
             [weak self] in self?.spawnCat()
             },
             SKAction.wait(forDuration: 1.0)])))
-        //Create a reference to the size of the BG node
-//        let mySize = background.size
-//        print("Size: \(mySize)")
-        
-        //Draw the aspect ratio
-        debugDrawPlayableArea()
+        playBackgroundMusic(filename: "backgroundMusic.mp3")
+        addChild(cameraNode)
+        camera = cameraNode
+        cameraNode.position = CGPoint(x: size.width/2, y: size.height/2)
     }
     
     override func update(_ currentTime: TimeInterval) {
@@ -94,7 +95,7 @@ class GameScene: SKScene {
             dt = 0.0
         }
         lastUpdateTime = currentTime
-//        print("\(dt*1000) milliseconds since last update")
+        /*
         let checkMoveOffset = zombie.position - lastTouchedLocation
         if (checkMoveOffset.length() <= zombieMovePointsPerSec * CGFloat(dt)) {
             zombie.position = lastTouchedLocation
@@ -104,11 +105,20 @@ class GameScene: SKScene {
             move(sprite: zombie, velocity: velocity)
             rotate(sprite: zombie, direction: velocity, rotateRadiansPerSec: zombieRotateRadiansPerSec)
         }
+ */
+        move(sprite: zombie, velocity: velocity)
+        rotate(sprite: zombie, direction: velocity, rotateRadiansPerSec: zombieRotateRadiansPerSec)
         boundsCheckZombie()
         moveTrain()
+        moveCamera()
         if lives <= 0 && !gameOver {
             gameOver = true
+            backgroundMusicPlayer.stop()
             print("You lose!")
+            let gameOverScene = GameOverScene(size: size, won: false)
+            gameOverScene.scaleMode = scaleMode
+            let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
+            view?.presentScene(gameOverScene, transition: reveal)
         }
     }
 
@@ -157,16 +167,16 @@ class GameScene: SKScene {
     }
     
     func boundsCheckZombie() {
-        let bottomLeft = CGPoint(x: 0, y: playableRect.minY)
-        let topRight = CGPoint(x: size.width, y: playableRect.maxY)
+        let bottomLeft = CGPoint(x: cameraRect.minX, y: cameraRect.minY)
+        let topRight = CGPoint(x: cameraRect.maxX, y: cameraRect.maxY)
         
         if zombie.position.x <= bottomLeft.x {
             zombie.position.x = bottomLeft.x
-            velocity.x = -velocity.x
+            velocity.x = abs(velocity.x)
         }
         if zombie.position.x >= topRight.x {
             zombie.position.x = topRight.x
-            velocity.x = -velocity.x
+            velocity.x = abs(velocity.x)
         }
         if zombie.position.y <= bottomLeft.y {
             zombie.position.y = bottomLeft.y
@@ -194,13 +204,13 @@ class GameScene: SKScene {
     func spawnEnemy() {
         let enemy = SKSpriteNode(imageNamed: "enemy")
         enemy.name = "enemy"
-        enemy.position = CGPoint(x: size.width + enemy.size.width/2,
+        enemy.position = CGPoint(x: cameraRect.maxX + enemy.size.width/2,
                                  y: CGFloat.random(
                                     min: playableRect.minY + enemy.size.height/2,
                                     max: playableRect.maxY - enemy.size.height/2))
         addChild(enemy)
     
-        let actionMove = SKAction.moveTo(x: -enemy.size.width/2,
+        let actionMove = SKAction.moveTo(x: cameraRect.minX - enemy.size.width/2,
                                          duration: 2.0)
         
         let actionRemove = SKAction.removeFromParent()
@@ -216,10 +226,11 @@ class GameScene: SKScene {
     func spawnCat() {
         let cat = SKSpriteNode(imageNamed: "cat")
         cat.name = "cat"
-        cat.position = CGPoint(x: CGFloat.random(min: playableRect.minX,
-                                                 max: playableRect.maxX),
-                               y: CGFloat.random(min: playableRect.minY,
-                                                 max: playableRect.maxY))
+        cat.position = CGPoint(x: CGFloat.random(min: cameraRect.minX,
+                                                 max: cameraRect.maxX),
+                               y: CGFloat.random(min: cameraRect.minY,
+                                                 max: cameraRect.maxY))
+        cat.zPosition = 50
         cat.setScale(0)
         addChild(cat)
         
@@ -329,7 +340,12 @@ class GameScene: SKScene {
         }
         if trainCount >= 15 && !gameOver {
             gameOver = true
+            backgroundMusicPlayer.stop()
             print("You win!")
+            let gameOverScene = GameOverScene(size: size, won: true)
+            gameOverScene.scaleMode = scaleMode
+            let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
+            view?.presentScene(gameOverScene, transition: reveal)
         }
     }
     
@@ -357,5 +373,47 @@ class GameScene: SKScene {
             }
         }
     }
-
+    
+    func backgroundNode() -> SKSpriteNode {
+        let backgroundNode = SKSpriteNode()
+        backgroundNode.anchorPoint = CGPoint.zero
+        backgroundNode.name = "background"
+        
+        let background1 = SKSpriteNode(imageNamed: "background1")
+        background1.anchorPoint = CGPoint.zero
+        background1.position = CGPoint(x: 0, y: 0)
+        backgroundNode.addChild(background1)
+        
+        let background2 = SKSpriteNode(imageNamed: "background2")
+        background2.anchorPoint = CGPoint.zero
+        background2.position = CGPoint(x: background1.size.width, y: 0)
+        backgroundNode.addChild(background2)
+        
+        backgroundNode.size = CGSize(width: background1.size.width + background2.size.width,
+                                     height: background1.size.height)
+        return backgroundNode
+    }
+    
+    func moveCamera() {
+        let backgroundVelocity = CGPoint(x: cameraMovePointsPerSec, y: 0)
+        let amountToMove = backgroundVelocity * CGFloat(dt)
+        cameraNode.position += amountToMove
+        
+        enumerateChildNodes(withName: "background") { node, _ in
+            let background = node as! SKSpriteNode
+            if background.position.x + background.size.width < self.cameraRect.origin.x {
+                background.position = CGPoint(x: background.position.x + background.size.width*2,
+                                              y: background.position.y)
+            }
+        }
+    }
+    
+    var cameraRect : CGRect {
+        let x = cameraNode.position.x - size.width/2 + (size.width - playableRect.width)/2
+        let y = cameraNode.position.y - size.height/2 + (size.height - playableRect.height)/2
+        return CGRect(x: x,
+                      y: y,
+                      width: playableRect.width,
+                      height: playableRect.height)
+    }
 }
