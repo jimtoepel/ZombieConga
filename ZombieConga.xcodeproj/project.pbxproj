@@ -21,6 +21,7 @@
 		B139DB3F2465DA2F00D26A81 /* backgroundMusic.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B139DB3A2465DA2F00D26A81 /* backgroundMusic.mp3 */; };
 		B15E8561246A2761003E2496 /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15E8560246A2761003E2496 /* GameOverScene.swift */; };
 		B15E8563246B4C7A003E2496 /* MainMenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15E8562246B4C7A003E2496 /* MainMenuScene.swift */; };
+		B15E8589246BABF3003E2496 /* GLIMSTIC.TTF in Resources */ = {isa = PBXBuildFile; fileRef = B15E8588246BABF3003E2496 /* GLIMSTIC.TTF */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		B139DB3A2465DA2F00D26A81 /* backgroundMusic.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = backgroundMusic.mp3; sourceTree = "<group>"; };
 		B15E8560246A2761003E2496 /* GameOverScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
 		B15E8562246B4C7A003E2496 /* MainMenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuScene.swift; sourceTree = "<group>"; };
+		B15E8588246BABF3003E2496 /* GLIMSTIC.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = GLIMSTIC.TTF; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 		B139DB1A245E7B4800D26A81 /* ZombieConga */ = {
 			isa = PBXGroup;
 			children = (
+				B15E8588246BABF3003E2496 /* GLIMSTIC.TTF */,
 				B139DB1B245E7B4800D26A81 /* AppDelegate.swift */,
 				B139DB21245E7B4800D26A81 /* GameScene.swift */,
 				B15E8560246A2761003E2496 /* GameOverScene.swift */,
@@ -157,6 +160,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B15E8589246BABF3003E2496 /* GLIMSTIC.TTF in Resources */,
 				B139DB3C2465DA2F00D26A81 /* lose.wav in Resources */,
 				B139DB27245E7B4800D26A81 /* Main.storyboard in Resources */,
 				B139DB3F2465DA2F00D26A81 /* backgroundMusic.mp3 in Resources */,

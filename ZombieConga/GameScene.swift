@@ -29,6 +29,8 @@ class GameScene: SKScene {
     var gameOver = false
     let cameraNode = SKCameraNode()
     let cameraMovePointsPerSec: CGFloat = 200.0
+    let livesLabel = SKLabelNode(fontNamed: "Glimstick")
+    let catsLabel = SKLabelNode(fontNamed: "Glimstick")
     
     
     //MARK: - Preload Actions
@@ -86,6 +88,8 @@ class GameScene: SKScene {
         addChild(cameraNode)
         camera = cameraNode
         cameraNode.position = CGPoint(x: size.width/2, y: size.height/2)
+        setupLivesLabel()
+        setupCatLabel()
     }
     
     override func update(_ currentTime: TimeInterval) {
@@ -111,6 +115,7 @@ class GameScene: SKScene {
         boundsCheckZombie()
         moveTrain()
         moveCamera()
+        livesLabel.text = "Lives: \(lives)"
         if lives <= 0 && !gameOver {
             gameOver = true
             backgroundMusicPlayer.stop()
@@ -122,6 +127,8 @@ class GameScene: SKScene {
         }
     }
 
+    
+    
     
     override func didEvaluateActions() {
         checkCollisions()
@@ -327,6 +334,7 @@ class GameScene: SKScene {
         
         enumerateChildNodes(withName: "train") { node, stop in
             trainCount += 1
+            self.catsLabel.text = "Cats: \(trainCount)"
             if !node.hasActions() {
                 let actionDuration = 0.3
                 let offset = targetPosition - node.position
@@ -415,5 +423,29 @@ class GameScene: SKScene {
                       y: y,
                       width: playableRect.width,
                       height: playableRect.height)
+    }
+    
+    func setupLivesLabel() {
+        livesLabel.text = "Lives: X"
+        livesLabel.fontColor = SKColor.black
+        livesLabel.fontSize = 100
+        livesLabel.zPosition = 150
+        livesLabel.horizontalAlignmentMode = .left
+        livesLabel.verticalAlignmentMode = .bottom
+        livesLabel.position = CGPoint(x: -playableRect.size.width/2 + CGFloat(20),
+                                      y: -playableRect.size.height/2 + CGFloat(20))
+        cameraNode.addChild(livesLabel)
+    }
+    
+    func setupCatLabel() {
+        catsLabel.text = "Cats: 0"
+        catsLabel.fontColor = SKColor.black
+        catsLabel.fontSize = 100
+        catsLabel.zPosition = 150
+        catsLabel.horizontalAlignmentMode = .right
+        catsLabel.verticalAlignmentMode = .bottom
+        catsLabel.position = CGPoint(x: playableRect.size.width/2 - CGFloat(20),
+                                     y: -playableRect.size.height/2 + CGFloat(20))
+        cameraNode.addChild(catsLabel)
     }
 }
